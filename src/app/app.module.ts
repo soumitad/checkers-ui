@@ -10,6 +10,8 @@ import { GameService } from './game/game.service';
 import { KingComponent } from './game/king.component';
 import { PawnComponent } from './game/pawn.component';
 import { SpaceComponent } from './game/space.component';
+import {CheckersService} from './game/checkers.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,9 +25,10 @@ import { SpaceComponent } from './game/space.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [GameService],
+  providers: [GameService, CheckersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
