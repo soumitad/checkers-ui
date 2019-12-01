@@ -7,6 +7,7 @@ import {Space} from './space';
 export class CheckersService {
 
   private usersUrl: string;
+  public selectedSpace: Space;
 
   constructor(private http: HttpClient) {
     this.usersUrl = 'http://localhost:8080/checkers/game';
@@ -15,4 +16,9 @@ export class CheckersService {
   public getCheckersBoard(): Observable<Space[][]> {
     return this.http.get<Space[][]>(this.usersUrl);
   }
+  public setSelectedSpace(space: Space): void {
+    console.log('Selected Space ', space);
+    this.selectedSpace = space;
+  }
+  public performMove(space: Space): void {}
 }

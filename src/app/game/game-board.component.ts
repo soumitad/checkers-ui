@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GameService } from './game.service';
-import {CheckersService} from "./checkers.service";
-import {Space} from "./space";
+import {CheckersService} from './checkers.service';
+import {Space} from './space';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.component.html',
