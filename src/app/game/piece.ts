@@ -4,7 +4,6 @@ export class Piece {
   jump = false; // Says whether the piece was jumped or not
   row: number = null;
   col: number = null;
-  color: string;
 
   constructor(color: string, r: number, c: number) {
     if (color === 'black') {

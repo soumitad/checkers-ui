@@ -1,6 +1,10 @@
-# Untitled
+# Steps to run
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.15.
+
+1. Clone the repo into your local machine
+2. Run `npm i` in Terminal or Git bash
+3. Run `ng serve` to start the Angular app in port 4200 
 
 ## Development server
 

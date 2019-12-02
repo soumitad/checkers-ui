@@ -1,10 +1,10 @@
-<div *ngIf="pawn.color === 'Red'"
+<div *ngIf="pawn.isRed"
 class="d-flex flex-column justify-content-center align-items-center">
 	<img src="../../assets/Images/red.png"
 	style="width: 95%; height: 95%">
 </div>
 
-<div *ngIf="pawn.color === 'Black'"
+<div *ngIf="!pawn.isRed"
 class="d-flex flex-column justify-content-center align-items-center">
 	<img src="../../assets/Images/black.png"
 	style="width: 95%; height: 95%">
