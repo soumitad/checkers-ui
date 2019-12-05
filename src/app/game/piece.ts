@@ -4,6 +4,9 @@ export class Piece {
   jump = false; // Says whether the piece was jumped or not
   row: number = null;
   col: number = null;
+  color: string;
+  pieceId: string;
+  pieceName: string;
 
   constructor(color: string, r: number, c: number) {
     if (color === 'black') {
@@ -23,7 +26,7 @@ export class Piece {
 }
 
 export class Pawn extends Piece {
-  type = 'pawn';
+  type = 'Pawn';
 
   // Nextdoor space moves
   getUpRightMove() {
@@ -53,7 +56,7 @@ export class Pawn extends Piece {
 }
 
 export class King extends Pawn {
-  type = 'king';
+  type = 'King';
 
   // Nextdoor space moves
   getDownRightMove() {

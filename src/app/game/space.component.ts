@@ -1,6 +1,7 @@
 import { Component, Input }	from '@angular/core';
 import { Space } from './space';
 import { GameService } from './game.service';
+import {CheckersService} from './checkers.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,7 +12,8 @@ import { GameService } from './game.service';
 export class SpaceComponent {
   @Input() space: Space;
   constructor(
-    private service: GameService
+    private service: GameService,
+    private checkerService: CheckersService
   ) {}
 
   highlightSpace(): void {

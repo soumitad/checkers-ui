@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GameService } from './game.service';
+import {CheckersService} from './checkers.service';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.component.html',
@@ -12,10 +13,15 @@ export class GameBoardComponent implements OnInit {
   public board: any;
   // Observables
     public resetGame$: Observable<boolean>;
-    constructor(private service: GameService
+    constructor(private service: GameService,
+                private checkerService: CheckersService
     ) {}
     ngOnInit() {
-      this.board = this.service.board;
-      console.log('Board ', this.board);
+      /* this.board = this.service.board; */
+      this.checkerService.getCheckersBoard().subscribe((result) => {
+        this.board = result.gameBoard;
+        this.checkerService.board = this.board;
+        console.log('Board ', this.checkerService.board);
+      });
     }
 }
