@@ -19,4 +19,10 @@ export class SpaceComponent {
   highlightSpace(): void {
     console.log('Piece clicked Row ', this.space.piece);
   }
+  performMove(space: Space): void {
+    this.checkerService.performMove(space);
+  }
+  fetchLegalMoves(space: Space): void {
+    this.checkerService.fetchLegalMoves(space);
+  }
 }
