@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { GameBoardComponent } from './game/game-board.component';
 import { GameConsoleComponent } from './game/game-console.component';
@@ -11,24 +10,36 @@ import { KingComponent } from './game/king.component';
 import { PawnComponent } from './game/pawn.component';
 import { SpaceComponent } from './game/space.component';
 import {CheckersService} from './game/checkers.service';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {ErrorInterceptor, JwtInterceptor} from './_helpers';
+import {LoginComponent} from './login/login.component';
+import {RegisterComponent} from './register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
-    AppComponent,
+      AppComponent,
     GameComponent,
     GameBoardComponent,
     GameConsoleComponent,
     SpaceComponent,
     PawnComponent,
-    KingComponent
+    KingComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
+      ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [GameService, CheckersService],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+      GameService,
+    CheckersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
