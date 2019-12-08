@@ -1,0 +1,18 @@
+<p>existing-game works!</p>
+<table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Player 1</th>
+                <th scope="col">Player 2</th>
+                <th scope="col">GameId</th>
+            </tr>
+        </thead>
+
+    <tbody>
+        <tr *ngFor="let game of userGames">
+            <td>{{game.player1}}</td>
+            <td>{{game.player2}}</td>
+            <td>{{game.gameId}}</td>
+        </tr>
+    </tbody>
+</table>
