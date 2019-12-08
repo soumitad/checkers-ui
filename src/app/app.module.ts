@@ -15,6 +15,8 @@ import {ErrorInterceptor, JwtInterceptor} from './_helpers';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ExistingGameComponent } from './existing-game/existing-game.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     PawnComponent,
     KingComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    DashboardComponent,
+    ExistingGameComponent
   ],
   imports: [
     BrowserModule,

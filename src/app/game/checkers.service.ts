@@ -4,6 +4,8 @@ import {Observable, of} from 'rxjs';
 import {Space} from './space';
 import {Piece} from './piece';
 import {map} from 'rxjs/operators';
+import {UserGames} from '../existing-game/existing-game.component';
+import {environment} from '../../environments/environment';
 
 export class GameInfo {
   gameId: string;
@@ -43,13 +45,15 @@ export class CheckersService {
     this.usersUrl = 'http://localhost:8080/checkers/game/102';
   }
 
-  public  getCheckersBoard(): Observable<GameInfo> {
-      return this.http.get<GameInfo>(this.usersUrl);
+  public getCheckersBoard(): Observable<GameInfo> {
+    return this.http.get<GameInfo>(this.usersUrl);
   }
+
   public setSelectedSpace(space: Space): void {
     console.log('Selected Space ', space);
     this.selectedSpace = space;
   }
+
   public fetchLegalMoves(space: Space): void {
     console.log('Piece selected');
     if (!!this.selectedSpace && this.selectedSpace !== space) {
@@ -74,6 +78,7 @@ export class CheckersService {
       });
     });
   }
+
   public performMove(space: Space): void {
     console.log('Selected Piece ', space);
     const currentPosition = this.selectedSpace.row + '-' + this.selectedSpace.col;
@@ -83,12 +88,14 @@ export class CheckersService {
     const type = this.selectedSpace.piece.type;
     let gamePlayRequest: GamePlayRequest;
     let gamePlayResponse: CheckersMoveResponse;
-    gamePlayRequest = { currentPosition,
+    gamePlayRequest = {
+      currentPosition,
       movePosition,
       pieceId,
       color,
       type,
-      gameId: '102'};
+      gameId: '102'
+    };
     this.http.put<CheckersMoveResponse>('http://localhost:8080/checkers/102/space', gamePlayRequest).subscribe((result) => {
       gamePlayResponse = result;
     });
@@ -114,6 +121,7 @@ export class CheckersService {
 
     return sp;
   }
+
   checkBoardSpace(row: number, col: number): Space {
     if (row < 8 && row > -1 && col < 8 && col > -1) {
       return this.board[row][col];
@@ -121,6 +129,7 @@ export class CheckersService {
       return null;
     }
   }
+
   // Clears all highlights, direction flags, and selected pieces from board
   clearSelections() {
     this.board.forEach(row => row.forEach(space => {
@@ -129,5 +138,9 @@ export class CheckersService {
         space.piece.jump = false;
       }
     }));
+  }
+
+  fetchExistingGamesForUser(username: string): Observable<UserGames[]> {
+    return this.http.get<UserGames[]>(`${environment.apiUrl}/user/sdas@gmail.com/games`);
   }
 }
