@@ -4,6 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { UserService, AuthenticationService } from '../_services';
+export class User {
+    userName: string;
+    firstName: string;
+    lastName: string;
+    password: string;
+}
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
@@ -43,9 +49,14 @@ export class RegisterComponent implements OnInit {
         if (this.registerForm.invalid) {
             return;
         }
-
+        // tslint:disable-next-line:prefer-const
+        let user: User = {firstName: '', lastName: '', userName: '', password: ''};
+        user.firstName = this.registerForm.get('firstName').value;
+        user.lastName = this.registerForm.get('lastName').value;
+        user.password = this.registerForm.get('password').value;
+        user.userName = this.registerForm.get('username').value;
         this.loading = true;
-        this.userService.register(this.registerForm.value)
+        this.userService.register(user)
             .pipe(first())
             .subscribe(
                 data => {

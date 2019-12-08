@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services';
+import {User} from '../register/register.component';
 
 @Component({templateUrl: 'login.component.html'})
 export class LoginComponent implements OnInit {
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
     ) {
         // redirect to home if already logged in
         if (this.authenticationService.currentUserValue) {
-            this.router.navigate(['/game']);
+            // this.router.navigate(['/game']);
         }
     }
 
@@ -54,13 +55,15 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         }
-
+        const logInUser: User = {userName: '', firstName: '', lastName: '', password: ''};
+        logInUser.userName = this.f.username.value;
+        logInUser.password = this.f.password.value;
         this.loading = true;
-        this.authenticationService.login(this.f.username.value, this.f.password.value)
+        this.authenticationService.login(logInUser)
             .pipe(first())
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                    this.router.navigate(['/dashboard']);
                 },
                 error => {
                     this.error = error;

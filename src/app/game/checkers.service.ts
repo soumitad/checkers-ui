@@ -6,6 +6,7 @@ import {Piece} from './piece';
 import {map} from 'rxjs/operators';
 import {UserGames} from '../existing-game/existing-game.component';
 import {environment} from '../../environments/environment';
+import {GameRequest} from '../dashboard/dashboard.component';
 
 export class GameInfo {
   gameId: string;
@@ -45,8 +46,8 @@ export class CheckersService {
     this.usersUrl = 'http://localhost:8080/checkers/game/102';
   }
 
-  public getCheckersBoard(): Observable<GameInfo> {
-    return this.http.get<GameInfo>(this.usersUrl);
+  public getCheckersBoard(gameId: string): Observable<GameInfo> {
+    return this.http.get<GameInfo>(`${environment.apiUrl}/checkers/game/${gameId}`);
   }
 
   public setSelectedSpace(space: Space): void {
@@ -141,6 +142,10 @@ export class CheckersService {
   }
 
   fetchExistingGamesForUser(username: string): Observable<UserGames[]> {
-    return this.http.get<UserGames[]>(`${environment.apiUrl}/user/sdas@gmail.com/games`);
+    return this.http.get<UserGames[]>(`${environment.apiUrl}/user/${username}/games`);
+  }
+
+  createNewGame(gameRequest: GameRequest): Observable<UserGames> {
+    return this.http.post<UserGames>(`${environment.apiUrl}/checkers/game`, gameRequest);
   }
 }

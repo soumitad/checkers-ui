@@ -14,7 +14,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ErrorInterceptor, JwtInterceptor} from './_helpers';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExistingGameComponent } from './existing-game/existing-game.component';
 
@@ -35,9 +35,10 @@ import { ExistingGameComponent } from './existing-game/existing-game.component';
   ],
   imports: [
     BrowserModule,
-      ReactiveFormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
