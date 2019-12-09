@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { GameService } from './game.service';
+import {CheckersService} from './checkers.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,7 +12,8 @@ import { GameService } from './game.service';
 })
 export class GameConsoleComponent implements OnInit {
   public turn: string = null;
-
+  @Input() public currentTurn: string;
+public boardTurn: string;
   // Observables
   public redTurn$: Observable<boolean>;
 
@@ -20,11 +22,12 @@ export class GameConsoleComponent implements OnInit {
   public _resetGame: BehaviorSubject<boolean>;
 
   constructor(
-    private service: GameService
-  ) {
-  }
+    private service: GameService,
+    private checkerService: CheckersService
+  ) {}
 
   ngOnInit() {
+    this.boardTurn = this.checkerService.currentTurn;
     this.redTurn$ = this.service.redTurnObs;
     this.redTurn$.subscribe(redTurn => {
       this.turn = redTurn ? 'Red' : 'Black';
@@ -33,7 +36,7 @@ export class GameConsoleComponent implements OnInit {
     // Behavior Subjects
     this._resetGame = this.service.resetGameBeh;
     this._resetGame.subscribe(reset => {
-      this.turn = 'Red'; // When the game is reset by someone else set the turn to Red
+      this.turn = 'Black'; // When the game is reset by someone else set the turn to Red
     });
   }
 

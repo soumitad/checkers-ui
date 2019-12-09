@@ -7,12 +7,31 @@ import {map} from 'rxjs/operators';
 import {UserGames} from '../existing-game/existing-game.component';
 import {environment} from '../../environments/environment';
 import {GameRequest} from '../dashboard/dashboard.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SocketClientService} from './SocketClientService';
 
 export class GameInfo {
   gameId: string;
   player1: string;
   player2: string;
   gameBoard: Space[][];
+  status: string;
+  currentTurn: string;
+  timeSinceLastMove: any;
+}
+
+export class SocketUpdate {
+  moveFrom?: string;
+  moveTo?: string;
+  color?: string;
+  currentTurn?: string;
+  gameId?: string;
+  moveRow?: number;
+  moveCol?: number;
+  toRow?: number;
+  toCol?: number;
+  type?: string;
+  isKing?: boolean;
 }
 
 export class GamePlayRequest {
@@ -32,6 +51,7 @@ export class CheckersMoveResponse {
   moveStatus: boolean;
   doubleJumpPossible?: boolean;
   doubleJumpSpace?: Space;
+  nextPlayerTurn?: string;
 }
 
 @Injectable()
@@ -41,8 +61,13 @@ export class CheckersService {
   public board: Space[][];
   private usersUrl: string;
   public selectedSpace: Space;
+  public currentTurn: string;
+  public disabled: boolean;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private route: ActivatedRoute,
+              private router: Router,
+              private socketClientService: SocketClientService) {
     this.usersUrl = 'http://localhost:8080/checkers/game/102';
   }
 
@@ -55,7 +80,7 @@ export class CheckersService {
     this.selectedSpace = space;
   }
 
-  public fetchLegalMoves(space: Space): void {
+  public fetchLegalMoves(space: Space, gameId: string): void {
     console.log('Piece selected');
     if (!!this.selectedSpace && this.selectedSpace !== space) {
       this.clearSelections();
@@ -68,7 +93,7 @@ export class CheckersService {
     const pa = new HttpParams().set('color', p.color).set('pieceId', p.pieceId)
         .set('currentPosition', space.row + '-' + space.col).set('type', p.type);
     console.log('Params ', pa);
-    this.http.get<Space[]>('http://localhost:8080/checkers/102/moves?', {params: pa}).subscribe((res) => {
+    this.http.get<Space[]>(`${environment.apiUrl}/checkers/${gameId}/moves?`, {params: pa}).subscribe((res) => {
       allowedSpaces = res;
       allowedSpaces.forEach(allowedSpace => {
         const boardSpace = this.checkBoardSpace(allowedSpace.row, allowedSpace.col);
@@ -80,7 +105,7 @@ export class CheckersService {
     });
   }
 
-  public performMove(space: Space): void {
+  public performMove(space: Space, gameId: string): void {
     console.log('Selected Piece ', space);
     const currentPosition = this.selectedSpace.row + '-' + this.selectedSpace.col;
     const movePosition = space.row + '-' + space.col;
@@ -95,14 +120,21 @@ export class CheckersService {
       pieceId,
       color,
       type,
-      gameId: '102'
+      gameId
     };
-    this.http.put<CheckersMoveResponse>('http://localhost:8080/checkers/102/space', gamePlayRequest).subscribe((result) => {
+    this.http.put<CheckersMoveResponse>(`${environment.apiUrl}/checkers/${gameId}/space`, gamePlayRequest).subscribe((result) => {
       gamePlayResponse = result;
+      this.currentTurn = result.nextPlayerTurn;
+      space.piece = this.selectedSpace.piece;
+      this.selectedSpace.piece = null;
+      this.clearSelections();
+      this.disabled = true;
+      const socketUpdateMessage: SocketUpdate = {moveFrom: currentPosition,
+      moveTo: movePosition, color, currentTurn: this.currentTurn, gameId,
+        moveRow: this.selectedSpace.row, moveCol: this.selectedSpace.col,
+      toRow: space.row, toCol: space.col, type, isKing: result.king};
+      this.socketClientService.sendMessage(socketUpdateMessage);
     });
-    space.piece = this.selectedSpace.piece;
-    this.selectedSpace.piece = null;
-    this.clearSelections();
     // Based on Jumped piece in the response, remove it from the board
     // Check if any winner
     // Check if a Piece can be turned into King

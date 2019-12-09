@@ -17,7 +17,10 @@ import {RegisterComponent} from './register/register.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExistingGameComponent } from './existing-game/existing-game.component';
+import {SocketClientService} from './game/SocketClientService';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -38,13 +41,15 @@ import { ExistingGameComponent } from './existing-game/existing-game.component';
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
       GameService,
-    CheckersService],
+    CheckersService,
+    SocketClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

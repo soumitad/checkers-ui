@@ -1,9 +1,9 @@
 <div class="d-flex flex-md-row flex-column justify-content-center align-items-center app-container">
   <div class="m-2">
-    <app-game-board [gameId]="gameId"></app-game-board>
+    <app-game-board [gameId]="gameId" (currentTurn)="displayCurrentTurn($event)"></app-game-board>
   </div>
   <div class="m-2">
-    <game-console></game-console>
+    <game-console [currentTurn]="currentTurn"></game-console>
   </div>
 </div>
 

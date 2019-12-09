@@ -8,17 +8,17 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  public board: any;
   @Input() public gameId: string;
+  public currentTurn: string;
   constructor(private service: GameService,
               private route: ActivatedRoute,
               private router: Router) {
     this.gameId = this.route.snapshot.paramMap.get('id');
   }
 
-  ngOnInit(): void {
-    this.board = this.service.board;
+  ngOnInit(): void {}
 
+  displayCurrentTurn(event: any) {
+    this.currentTurn = event;
   }
-
 }
