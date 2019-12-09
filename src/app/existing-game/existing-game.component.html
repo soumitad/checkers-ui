@@ -5,6 +5,9 @@
                 <th scope="col">Player 1</th>
                 <th scope="col">Player 2</th>
                 <th scope="col">GameId</th>
+                <th scope="col">Status</th>
+                <th scope="col">Join Game</th>
+                <th scope="col">Game History</th>
             </tr>
         </thead>
 
@@ -13,7 +16,10 @@
             <td>{{game.player1}}</td>
             <td>{{game.player2}}</td>
             <td>{{game.gameId}}</td>
-            <td><button type="button" class="btn btn-primary btn-info" (click)="joinGame(game)">Join Game</button></td>
+            <td>{{game.status}}</td>
+            <td><button [disabled]="game.disabled" type="button"
+                        class="btn btn-primary btn-info" (click)="joinGame(game)">Join Game</button></td>
+            <td></td>
         </tr>
     </tbody>
 </table>

@@ -9,8 +9,11 @@ export class UserGames {
   player1: string;
   player2: string;
   gameId: string;
-  link: string;
+  link?: string;
   board?: Space[][];
+  status: string;
+  winner?: string;
+  disabled?: boolean;
 }
 
 @Component({
@@ -35,13 +38,12 @@ export class ExistingGameComponent implements OnInit {
       this.userGames = result;
       console.log('Existing games ', this.userGames);
       this.userGames.forEach((userGame) => {
-        userGame.link = `${environment.apiUrl}/game/{userGame.gameId}`;
+        userGame.disabled = userGame.status === 'Complete';
       });
     });
   }
 
   joinGame(game: UserGames) {
-    console.log('', game);
     this.router.navigate(['/game', game.gameId]);
   }
 }

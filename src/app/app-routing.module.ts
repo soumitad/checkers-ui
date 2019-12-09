@@ -9,13 +9,13 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {ExistingGameComponent} from './existing-game/existing-game.component';
 
 const routes: Routes = [
-  { path: 'game', component: GameComponent/*, canActivate: [AuthGuard]*/ },
-  { path: 'game/:id', component: GameComponent/*, canActivate: [AuthGuard]*/ },
+  { path: 'game', component: GameComponent, canActivate: [AuthGuard]},
+  { path: 'game/:id', component: GameComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent},
-  { path: 'existing-game/:userName', component: ExistingGameComponent}
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  { path: 'existing-game/:userName', component: ExistingGameComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
