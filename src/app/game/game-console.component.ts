@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { GameService } from './game.service';
 import {CheckersService} from './checkers.service';
+import {User} from '../register/register.component';
+import {AuthenticationService} from '../_services';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -14,6 +16,8 @@ export class GameConsoleComponent implements OnInit {
   public turn: string = null;
   @Input() public currentTurn: string;
 public boardTurn: string;
+public loggedInUser: User;
+public loggedInUserColor: string;
   // Observables
   public redTurn$: Observable<boolean>;
 
@@ -23,8 +27,11 @@ public boardTurn: string;
 
   constructor(
     private service: GameService,
-    private checkerService: CheckersService
-  ) {}
+    private checkerService: CheckersService,
+    private authService: AuthenticationService
+  ) {
+    this.loggedInUser = this.authService.loggedInUser;
+  }
 
   ngOnInit() {
     this.boardTurn = this.checkerService.currentTurn;

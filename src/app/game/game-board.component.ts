@@ -1,7 +1,7 @@
 // This will be a component that houses the actual checkers game board
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import {from, Observable} from 'rxjs';
 import { GameService } from './game.service';
 import {CheckersService} from './checkers.service';
 import {AuthenticationService} from '../_services';
@@ -31,36 +31,44 @@ export class GameBoardComponent implements OnInit {
     ngOnInit() {
       /* this.board = this.service.board; */
       this.socketClientService.onNewMessage().subscribe((fromServer) => {
-        console.log('From Server updates ', fromServer);
-        // Server side updates from the other end
-        this.checkerService.currentTurn = fromServer.currentTurn;
         if (this.loggedInUser.userName === fromServer.currentTurn) {
-          this.checkerService.disabled = false;
-        }
-        // Clear piece from current space
-        const movedPieceRow = fromServer.moveRow;
-        const movePieceCol = fromServer.moveCol;
-        let p: Piece;
-        this.checkerService.board.forEach(row => row.forEach(space => {
-          if (space.row === movedPieceRow && space.col === movePieceCol) {
-            console.log('Trying to remove this piece for more RTU');
-            p = space.piece;
-            space.piece = null;
+          console.log('From Server updates ', fromServer);
+          // Server side updates from the other end
+          this.checkerService.currentTurn = fromServer.currentTurn;
+          if (this.loggedInUser.userName === fromServer.currentTurn) {
+            this.checkerService.disabled = false;
           }
-        }));
-        const toRow = fromServer.toRow;
-        const toCol = fromServer.toCol;
-        this.checkerService.board.forEach(row => row.forEach(space => {
-          if (space.row === toRow && space.col === toCol) {
-            if (fromServer.type === 'Pawn' && !fromServer.isKing) {
-              space.piece = p;
-            } else {
-              p.type = 'King';
-              space.piece = p;
+          // Clear piece from current space
+          const movedPieceRow = fromServer.moveRow;
+          const movePieceCol = fromServer.moveCol;
+          let p: Piece;
+          this.checkerService.board.forEach(row => row.forEach(space => {
+            if (space.row === movedPieceRow && space.col === movePieceCol) {
+              console.log('Trying to remove this piece for more RTU');
+              console.log('', space.row, '-', space.col);
+              p = space.piece;
+              space.piece = null;
             }
+          }));
+          const toRow = fromServer.toRow;
+          const toCol = fromServer.toCol;
+          this.checkerService.board.forEach(row => row.forEach(space => {
+            if (space.row === toRow && space.col === toCol) {
+              if (fromServer.type === 'Pawn' && !fromServer.isKing) {
+                console.log('To Row ', toRow, '-', toCol);
+                console.log('Piece ', p);
+                space.piece = p;
+              } else {
+                p.type = 'King';
+                space.piece = p;
+              }
+            }
+          }));
+          if (fromServer.jump) {
+            const jumpSpace = this.checkerService.checkBoardSpace(fromServer.jumpRow, fromServer.jumpCol);
+            jumpSpace.piece = null;
           }
-        }));
-
+        }
       });
       this.loggedInUser = this.authService.loggedInUser;
       this.checkerService.getCheckersBoard(this.gameId).subscribe((result) => {
@@ -76,6 +84,7 @@ export class GameBoardComponent implements OnInit {
         } else {
           this.loggedInUserColor = 'Red';
         }
+        this.checkerService.loggedInUserColor = this.loggedInUserColor;
         console.log('Board ', result);
       });
     }

@@ -32,6 +32,9 @@ export class SocketUpdate {
   toCol?: number;
   type?: string;
   isKing?: boolean;
+  jump?: boolean;
+  jumpRow?: number;
+  jumpCol?: number;
 }
 
 export class GamePlayRequest {
@@ -63,6 +66,7 @@ export class CheckersService {
   public selectedSpace: Space;
   public currentTurn: string;
   public disabled: boolean;
+  public loggedInUserColor: string;
 
   constructor(private http: HttpClient,
               private route: ActivatedRoute,
@@ -126,16 +130,27 @@ export class CheckersService {
       gamePlayResponse = result;
       this.currentTurn = result.nextPlayerTurn;
       space.piece = this.selectedSpace.piece;
+      if (result.king) {
+        space.piece.type = 'King';
+      }
       this.selectedSpace.piece = null;
       this.clearSelections();
       this.disabled = true;
+      let jumpSpace: Space;
       const socketUpdateMessage: SocketUpdate = {moveFrom: currentPosition,
       moveTo: movePosition, color, currentTurn: this.currentTurn, gameId,
         moveRow: this.selectedSpace.row, moveCol: this.selectedSpace.col,
-      toRow: space.row, toCol: space.col, type, isKing: result.king};
+      toRow: space.row, toCol: space.col, type, isKing: result.king, jump: result.jump};
+      if (!!result.doubleJumpSpace) {
+        jumpSpace = result.doubleJumpSpace;
+        socketUpdateMessage.jumpRow = jumpSpace.row;
+        socketUpdateMessage.jumpCol = jumpSpace.col;
+        const jumpSpaceBoard: Space = this.checkBoardSpace(jumpSpace.row, jumpSpace.col);
+        // Based on Jumped piece in the response, remove it from the board
+        jumpSpaceBoard.piece = null;
+      }
       this.socketClientService.sendMessage(socketUpdateMessage);
     });
-    // Based on Jumped piece in the response, remove it from the board
     // Check if any winner
     // Check if a Piece can be turned into King
     // Check if it was jump, then clear opponent piece, also check if a double jump possible?
