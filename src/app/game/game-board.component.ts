@@ -21,6 +21,7 @@ export class GameBoardComponent implements OnInit {
   public disableSpace = true;
   public loggedInUserColor: string;
   public boardTurn: string;
+  public timeSinceLastMove: string;
   // Observables
     public resetGame$: Observable<boolean>;
     constructor(private service: GameService,
@@ -79,12 +80,15 @@ export class GameBoardComponent implements OnInit {
         this.boardTurn = this.checkerService.currentTurn;
         this.disableSpace = this.loggedInUser.userName !== result.currentTurn;
         this.checkerService.disabled = this.disableSpace;
+        this.checkerService.timeSinceLastMove = result.timeSinceLastMove;
         if (this.loggedInUser.userName === result.player1) {
           this.loggedInUserColor = 'Black';
         } else {
           this.loggedInUserColor = 'Red';
         }
         this.checkerService.loggedInUserColor = this.loggedInUserColor;
+        console.log('Move History ', result.gameHistories);
+        this.checkerService.moveHistory = result.gameHistories;
         console.log('Board ', result);
       });
     }

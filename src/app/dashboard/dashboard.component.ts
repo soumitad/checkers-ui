@@ -49,4 +49,8 @@ export class DashboardComponent implements OnInit {
     });
     console.log(this.player2);
   }
+
+    viewGamePlayStats() {
+      this.router.navigate(['/gameplay-stats']);
+    }
 }

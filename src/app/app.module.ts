@@ -19,6 +19,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExistingGameComponent } from './existing-game/existing-game.component';
 import {SocketClientService} from './game/SocketClientService';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { GameplayStatsComponent } from './gameplay-stats/gameplay-stats.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -34,7 +35,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     LoginComponent,
     RegisterComponent,
     DashboardComponent,
-    ExistingGameComponent
+    ExistingGameComponent,
+    GameplayStatsComponent
   ],
   imports: [
     BrowserModule,

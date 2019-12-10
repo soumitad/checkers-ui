@@ -18,6 +18,7 @@ export class GameInfo {
   status: string;
   currentTurn: string;
   timeSinceLastMove: any;
+  gameHistories: GameHistory[];
 }
 
 export class SocketUpdate {
@@ -46,6 +47,15 @@ export class GamePlayRequest {
   movePosition: string;
 }
 
+export class GameHistory {
+  gameId: string;
+  color: string;
+  fromMove: string;
+  toMove: string;
+  type: string;
+  moveType: string;
+}
+
 export class CheckersMoveResponse {
   move: Space;
   jump: boolean;
@@ -55,6 +65,7 @@ export class CheckersMoveResponse {
   doubleJumpPossible?: boolean;
   doubleJumpSpace?: Space;
   nextPlayerTurn?: string;
+  moveHistory: GameHistory[];
 }
 
 @Injectable()
@@ -67,6 +78,8 @@ export class CheckersService {
   public currentTurn: string;
   public disabled: boolean;
   public loggedInUserColor: string;
+  public timeSinceLastMove: number;
+  public moveHistory: GameHistory[];
 
   constructor(private http: HttpClient,
               private route: ActivatedRoute,
@@ -149,6 +162,7 @@ export class CheckersService {
         // Based on Jumped piece in the response, remove it from the board
         jumpSpaceBoard.piece = null;
       }
+      this.moveHistory = result.moveHistory;
       this.socketClientService.sendMessage(socketUpdateMessage);
     });
     // Check if any winner

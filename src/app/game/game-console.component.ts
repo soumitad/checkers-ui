@@ -18,6 +18,7 @@ export class GameConsoleComponent implements OnInit {
 public boardTurn: string;
 public loggedInUser: User;
 public loggedInUserColor: string;
+public timeSinceLastMove: number;
   // Observables
   public redTurn$: Observable<boolean>;
 
@@ -27,13 +28,15 @@ public loggedInUserColor: string;
 
   constructor(
     private service: GameService,
-    private checkerService: CheckersService,
+    public checkerService: CheckersService,
     private authService: AuthenticationService
   ) {
     this.loggedInUser = this.authService.loggedInUser;
+    this.timeSinceLastMove = this.checkerService.timeSinceLastMove;
   }
 
   ngOnInit() {
+    this.timeSinceLastMove = this.checkerService.timeSinceLastMove;
     this.boardTurn = this.checkerService.currentTurn;
     this.redTurn$ = this.service.redTurnObs;
     this.redTurn$.subscribe(redTurn => {

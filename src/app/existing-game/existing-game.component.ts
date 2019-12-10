@@ -14,6 +14,7 @@ export class UserGames {
   status: string;
   winner?: string;
   disabled?: boolean;
+  timeSinceLastMove?: number;
 }
 
 @Component({

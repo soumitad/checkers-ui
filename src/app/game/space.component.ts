@@ -30,6 +30,7 @@ export class SpaceComponent {
     console.log('Piece clicked Row ', this.space.piece);
   }
   performMove(space: Space): void {
+    console.log('Space Highlight ', space);
     if (!this.checkerService.disabled &&
         this.checkerService.selectedSpace.piece.color === this.loggedInUserColor &&
     this.space.highlight) {
