@@ -1,6 +1,14 @@
 <div clsss="row">
-	<div class="col-md-12">
+	<div class="col-md-4">
 		Last Move made: <strong>{{checkerService.timeSinceLastMove | date:'h:mm a z'}}</strong>
+	</div>
+	<div class="col-md-8">
+		Winner: <strong>{{checkerService.winner}}</strong>
+	</div>
+</div>
+<div clsss="row" *ngIf="checkerService.winner">
+	<div class="col-md-12">
+		Winner: <strong>{{checkerService.customMessage}}</strong>
 	</div>
 </div>
 <div class="board">

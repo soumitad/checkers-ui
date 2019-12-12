@@ -36,6 +36,10 @@ export class SocketUpdate {
   jump?: boolean;
   jumpRow?: number;
   jumpCol?: number;
+  timeSinceLastMove?: string;
+  customMessage?: string;
+  winPlayer?: string;
+  moveHistory?: GameHistory[];
 }
 
 export class GamePlayRequest {
@@ -66,6 +70,8 @@ export class CheckersMoveResponse {
   doubleJumpSpace?: Space;
   nextPlayerTurn?: string;
   moveHistory: GameHistory[];
+  customMessage?: string;
+  winPlayer?: string;
 }
 
 @Injectable()
@@ -80,6 +86,8 @@ export class CheckersService {
   public loggedInUserColor: string;
   public timeSinceLastMove: number;
   public moveHistory: GameHistory[];
+  public winner: string;
+  public customMessage: string;
 
   constructor(private http: HttpClient,
               private route: ActivatedRoute,
@@ -98,7 +106,6 @@ export class CheckersService {
   }
 
   public fetchLegalMoves(space: Space, gameId: string): void {
-    console.log('Piece selected');
     if (!!this.selectedSpace && this.selectedSpace !== space) {
       this.clearSelections();
     }
@@ -106,15 +113,12 @@ export class CheckersService {
     const p: Piece = space.piece;
     let allowedSpaces: Space[] = [];
     this.findPiece(p).highlight = true;
-    console.log('Piece ', p);
     const pa = new HttpParams().set('color', p.color).set('pieceId', p.pieceId)
         .set('currentPosition', space.row + '-' + space.col).set('type', p.type);
-    console.log('Params ', pa);
     this.http.get<Space[]>(`${environment.apiUrl}/checkers/${gameId}/moves?`, {params: pa}).subscribe((res) => {
       allowedSpaces = res;
       allowedSpaces.forEach(allowedSpace => {
         const boardSpace = this.checkBoardSpace(allowedSpace.row, allowedSpace.col);
-        console.log('Inside here ', boardSpace);
         if (boardSpace.row === allowedSpace.row && boardSpace.col === allowedSpace.col) {
           boardSpace.highlight = true;
         }
@@ -123,7 +127,6 @@ export class CheckersService {
   }
 
   public performMove(space: Space, gameId: string): void {
-    console.log('Selected Piece ', space);
     const currentPosition = this.selectedSpace.row + '-' + this.selectedSpace.col;
     const movePosition = space.row + '-' + space.col;
     const pieceId = this.selectedSpace.piece.pieceName;
@@ -150,10 +153,18 @@ export class CheckersService {
       this.clearSelections();
       this.disabled = true;
       let jumpSpace: Space;
+      if (!!result.customMessage) {
+        if (!!result.winPlayer) {
+          this.winner = result.winPlayer;
+          this.customMessage = result.customMessage;
+        }
+      }
       const socketUpdateMessage: SocketUpdate = {moveFrom: currentPosition,
       moveTo: movePosition, color, currentTurn: this.currentTurn, gameId,
         moveRow: this.selectedSpace.row, moveCol: this.selectedSpace.col,
-      toRow: space.row, toCol: space.col, type, isKing: result.king, jump: result.jump};
+      toRow: space.row, toCol: space.col, type, isKing: result.king,
+        jump: result.jump, moveHistory: result.moveHistory, winPlayer: result.winPlayer
+      , customMessage: result.customMessage};
       if (!!result.doubleJumpSpace) {
         jumpSpace = result.doubleJumpSpace;
         socketUpdateMessage.jumpRow = jumpSpace.row;
@@ -165,9 +176,6 @@ export class CheckersService {
       this.moveHistory = result.moveHistory;
       this.socketClientService.sendMessage(socketUpdateMessage);
     });
-    // Check if any winner
-    // Check if a Piece can be turned into King
-    // Check if it was jump, then clear opponent piece, also check if a double jump possible?
   }
 
   // Finds a piece on the board and returns the space it is on

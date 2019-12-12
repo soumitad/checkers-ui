@@ -65,6 +65,9 @@ export class GameBoardComponent implements OnInit {
               }
             }
           }));
+          this.checkerService.moveHistory = fromServer.moveHistory;
+          this.checkerService.winner = fromServer.winPlayer;
+          this.checkerService.customMessage = fromServer.customMessage;
           if (fromServer.jump) {
             const jumpSpace = this.checkerService.checkBoardSpace(fromServer.jumpRow, fromServer.jumpCol);
             jumpSpace.piece = null;

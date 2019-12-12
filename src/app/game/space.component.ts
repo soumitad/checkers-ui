@@ -23,23 +23,23 @@ export class SpaceComponent {
     private service: GameService,
     private checkerService: CheckersService,
     private authService: AuthenticationService
-  ) {
-  }
-
-  highlightSpace(): void {
-    console.log('Piece clicked Row ', this.space.piece);
-  }
+  ) {}
   performMove(space: Space): void {
     console.log('Space Highlight ', space);
-    if (!this.checkerService.disabled &&
-        this.checkerService.selectedSpace.piece.color === this.loggedInUserColor &&
-    this.space.highlight) {
-      this.checkerService.performMove(space, this.gameId);
+    if (!this.checkerService.winner) {
+      if (!this.checkerService.disabled &&
+          this.checkerService.selectedSpace.piece.color === this.loggedInUserColor &&
+          this.space.highlight) {
+        this.checkerService.performMove(space, this.gameId);
+      }
     }
   }
   fetchLegalMoves(space: Space): void {
-    if (!this.checkerService.disabled && this.space.piece.color === this.loggedInUserColor) {
-      this.checkerService.fetchLegalMoves(space, this.gameId);
+    console.log('Clicked Piece', space);
+    if (!this.checkerService.winner) {
+      if (!this.checkerService.disabled && this.space.piece.color === this.loggedInUserColor) {
+        this.checkerService.fetchLegalMoves(space, this.gameId);
+      }
     }
   }
 }

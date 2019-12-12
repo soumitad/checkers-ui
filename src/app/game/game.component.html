@@ -1,20 +1,15 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-9">
-      <div class="m-8">
+<div class="d-flex flex-md-row flex-column justify-content-center align-items-center app-container">
+  <div class="m-2">
         <app-game-board [gameId]="gameId" (currentTurn)="displayCurrentTurn($event)"></app-game-board>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="m-2">
-        <game-console [currentTurn]="currentTurn"></game-console>
-      </div>
-    </div>
   </div>
+  <div class="m-2">
+        <game-console [currentTurn]="currentTurn"></game-console>
+  </div>
+    </div>
 
-</div>
 
 <!-- Notification panel that grays out the screen if there is a winner !-->
 <div class="notification" *ngIf="true">
   <div class="notification-background"></div>
 </div>
+
