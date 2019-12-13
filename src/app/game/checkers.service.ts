@@ -74,6 +74,13 @@ export class CheckersMoveResponse {
   winPlayer?: string;
 }
 
+export class GamePlayStats {
+    username: string;
+    totalGamesPlayed: number;
+    won: number;
+    lost: number;
+}
+
 @Injectable()
 export class CheckersService {
 
@@ -216,5 +223,9 @@ export class CheckersService {
 
   createNewGame(gameRequest: GameRequest): Observable<UserGames> {
     return this.http.post<UserGames>(`${environment.apiUrl}/checkers/game`, gameRequest);
+  }
+
+  fetchGamePlayStats(): Observable<GamePlayStats[]> {
+      return this.http.get<GamePlayStats[]>(`${environment.apiUrl}/checkers/game/stats`);
   }
 }

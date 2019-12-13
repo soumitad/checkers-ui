@@ -1,1 +1,25 @@
-<p>gameplay-stats works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Player</th>
+                        <th scope="col">Total Games Played</th>
+                        <th scope="col">Win</th>
+                        <th scope="col">Loss</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let gamePlayStat of gamePlayStats">
+                        <td>{{gamePlayStat.username}}</td>
+                        <td>{{gamePlayStat.totalGamesPlayed}}</td>
+                        <td>{{gamePlayStat.won}}</td>
+                        <td>{{gamePlayStat.lost}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

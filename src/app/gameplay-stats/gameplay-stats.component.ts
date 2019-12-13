@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CheckersService} from '../game/checkers.service';
+import {CheckersService, GamePlayStats} from '../game/checkers.service';
 
 @Component({
   selector: 'app-gameplay-stats',
@@ -8,9 +8,15 @@ import {CheckersService} from '../game/checkers.service';
 })
 export class GameplayStatsComponent implements OnInit {
 
+  public gamePlayStats: GamePlayStats[] = [];
   constructor(private checkerService: CheckersService) { }
 
   ngOnInit() {
+    this.checkerService.fetchGamePlayStats().subscribe((result) => {
+      result.forEach((gamePlayStat) => {
+        this.gamePlayStats.push(gamePlayStat);
+      });
+    });
   }
 
 }
