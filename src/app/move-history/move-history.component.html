@@ -1,0 +1,25 @@
+<div class="container-fluid">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Color</th>
+            <th scope="col">Type</th>
+            <th scope="col">From Move</th>
+            <th scope="col">To Move</th>
+            <th scope="col">Move Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let gameHistory of moveHistory">
+            <td>{{gameHistory.color}}</td>
+            <td>{{gameHistory.type}}</td>
+            <td>{{gameHistory.fromMove}}</td>
+            <td>{{gameHistory.toMove}}</td>
+            <td>{{gameHistory.moveType}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
