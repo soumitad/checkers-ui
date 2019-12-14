@@ -8,6 +8,7 @@ import {RegisterComponent} from './register/register.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {ExistingGameComponent} from './existing-game/existing-game.component';
 import {GameplayStatsComponent} from './gameplay-stats/gameplay-stats.component';
+import {MoveHistoryComponent} from './move-history/move-history.component';
 
 const routes: Routes = [
   { path: 'game', component: GameComponent, canActivate: [AuthGuard]},
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   { path: 'existing-game/:userName', component: ExistingGameComponent, canActivate: [AuthGuard]},
-  { path: 'gameplay-stats', component: GameplayStatsComponent, canActivate: [AuthGuard]}
+  { path: 'gameplay-stats', component: GameplayStatsComponent, canActivate: [AuthGuard]},
+  { path: 'move-history/:id', component: MoveHistoryComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

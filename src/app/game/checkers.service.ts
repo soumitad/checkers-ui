@@ -228,4 +228,8 @@ export class CheckersService {
   fetchGamePlayStats(): Observable<GamePlayStats[]> {
       return this.http.get<GamePlayStats[]>(`${environment.apiUrl}/checkers/game/stats`);
   }
+
+  fetchGameHistory(gameId: string): Observable<GameHistory[]> {
+    return this.http.get<GameHistory[]>(`${environment.apiUrl}/checkers/game/${gameId}/history`);
+  }
 }

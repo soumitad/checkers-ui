@@ -1,4 +1,3 @@
-<p>existing-game works!</p>
 <table class="table">
         <thead>
             <tr>
@@ -19,7 +18,8 @@
             <td>{{game.status}}</td>
             <td><button [disabled]="game.disabled" type="button"
                         class="btn btn-primary btn-info" (click)="joinGame(game)">Join Game</button></td>
-            <td></td>
+            <td><button *ngIf="game.disabled" type="button"
+                        class="btn btn-primary btn-info" (click)="displayMoveHistory(game.gameId)">Move History</button></td>
         </tr>
     </tbody>
 </table>

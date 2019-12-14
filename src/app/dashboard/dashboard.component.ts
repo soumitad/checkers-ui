@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   public enablePlayerInvite: boolean;
   public loggedInUser: User;
   public player2: string;
+  public error: string;
   constructor(private route: ActivatedRoute,
               private router: Router,
               private authService: AuthenticationService,
@@ -46,11 +47,19 @@ export class DashboardComponent implements OnInit {
     const gameRequest: GameRequest = {player1: this.loggedInUser.userName, player2: this.player2};
     this.checkerService.createNewGame(gameRequest).subscribe((result) => {
       this.router.navigate(['/game', result.gameId]);
-    });
-    console.log(this.player2);
+    },
+        error => {
+            this.error = 'You cant invite yourself to play the game';
+        });
   }
 
     viewGamePlayStats() {
       this.router.navigate(['/gameplay-stats']);
     }
+
+  cancel() {
+    this.disableCreateNewGameButton = false;
+    this.enablePlayerInvite = false;
+    this.player2 = '';
+  }
 }

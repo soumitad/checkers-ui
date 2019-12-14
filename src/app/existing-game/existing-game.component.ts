@@ -47,4 +47,8 @@ export class ExistingGameComponent implements OnInit {
   joinGame(game: UserGames) {
     this.router.navigate(['/game', game.gameId]);
   }
+
+  displayMoveHistory(gameId: string) {
+    this.router.navigate(['/move-history', gameId]);
+  }
 }
